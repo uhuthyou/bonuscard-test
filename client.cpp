@@ -51,3 +51,7 @@ void Client::displayInfo() const {
     std::cout << "Card Number: " << card.getCardNumber() << "\n";
     std::cout << "Balance: " << card.getBalance() << "\n";
 }
+
+BonusCard& Client::getBonusCard() {
+    return card;
+}

@@ -1,7 +1,6 @@
 // system.cpp
 
 #include "system.h"
-#include "client.h"
 
 System::System(const std::string& username, const std::string& password)
     : adminUsername(username), adminPassword(password) {}
@@ -24,4 +23,14 @@ void System::registerClient() {
     // Создаем объект клиента и регистрируем его
     Client newClient(clientName);
     newClient.registerClient();
+}
+
+void System::depositToClientBalance(const std::string& clientName, double amount) {
+    // Создаем объект клиента и пополняем его баланс
+    Client client(clientName);
+    client.getBonusCard().addToBalance(amount);
+
+    // Выводим информацию о клиенте после пополнения баланса
+    std::cout << "Deposit successful!\n";
+    client.displayInfo();
 }

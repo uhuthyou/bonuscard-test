@@ -32,6 +32,7 @@ public:
     Client(const std::string& clientName);
     void registerClient();
     void displayInfo() const;
+    BonusCard& getBonusCard(); // Добавим новый метод
 };
 
 #endif // CLIENT_H

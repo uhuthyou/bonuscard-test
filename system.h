@@ -5,7 +5,7 @@
 
 #include <iostream>
 #include <string>
-#include "client.h" // Добавим включение заголовочного файла с классом Client
+#include "client.h"
 
 class System {
 private:
@@ -15,7 +15,8 @@ private:
 public:
     System(const std::string& username, const std::string& password);
     bool login(const std::string& username, const std::string& password);
-    void registerClient(); // Добавим объявление нового метода
+    void registerClient();
+    void depositToClientBalance(const std::string& clientName, double amount); // Добавим новый метод
 };
 
 #endif // SYSTEM_H
