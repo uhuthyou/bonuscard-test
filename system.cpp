@@ -59,8 +59,8 @@ void System::depositToClientBalance(const std::string& clientName, double amount
 
         // Обновляем суммарную информацию
         totalDeposited += amount;
-        std::cout << "Deposit successful!\n";
-        it->displayInfo();
+        std::cout << "Deposit successful! Updated balance for client " << clientName << ": " << it->getBonusCard().getBalance() << "\n";
+        //it->displayInfo();
     } else {
         std::cout << "Client not found. Deposit failed.\n";
     }
@@ -76,8 +76,8 @@ void System::withdrawFromClientBalance(const std::string& clientName, double amo
 
         // Обновляем суммарную информацию
         totalWithdrawn += amount;
-        std::cout << "Withdrawal successful!\n";
-        it->displayInfo();
+        std::cout << "Withdrawal successful!\n";        std::cout << "Withdrawal successful! Updated balance for client " << clientName << ": " << it->getBonusCard().getBalance() << "\n";
+        //it->displayInfo();
     } else {
         std::cout << "Client not found. Withdrawal failed.\n";
     }
