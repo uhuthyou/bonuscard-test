@@ -1,6 +1,7 @@
 // system.cpp
 
 #include "system.h"
+#include <algorithm>
 
 System::System(const std::string& username, const std::string& password)
     : adminUsername(username), adminPassword(password) {}
@@ -23,39 +24,54 @@ void System::registerClient() {
     // Создаем объект клиента и регистрируем его
     Client newClient(clientName);
     newClient.registerClient();
-    clients.push_back(newClient);  // Добавляем зарегистрированного клиента в вектор
+
+    // Добавляем клиента в вектор
+    clients.push_back(newClient);
 }
 
 void System::depositToClientBalance(const std::string& clientName, double amount) {
     // Ищем клиента в векторе
-    for (auto& client : clients) {
-        if (client.getName() == clientName) {
-            // Пополняем баланс найденного клиента
-            client.getBonusCard().addToBalance(amount);
+    auto it = std::find_if(clients.begin(), clients.end(),
+                           [&clientName](const Client& client) { return client.getName() == clientName; });
 
-            // Выводим информацию о клиенте после пополнения баланса
-            std::cout << "Deposit successful!\n";
-            client.displayInfo();
-            return;  // Завершаем выполнение метода после обработки клиента
-        }
+    if (it != clients.end()) {
+        // Если клиент найден, пополняем его баланс
+        it->getBonusCard().addToBalance(amount);
+
+        // Выводим информацию о клиенте после пополнения баланса
+        std::cout << "Deposit successful!\n";
+        it->displayInfo();
+    } else {
+        std::cout << "Client not found. Deposit failed.\n";
     }
-
-    std::cout << "Client not found.\n";
 }
 
 void System::withdrawFromClientBalance(const std::string& clientName, double amount) {
     // Ищем клиента в векторе
-    for (auto& client : clients) {
-        if (client.getName() == clientName) {
-            // Списываем бонусы с баланса найденного клиента
-            client.withdrawFromBalance(amount);
+    auto it = std::find_if(clients.begin(), clients.end(),
+                           [&clientName](const Client& client) { return client.getName() == clientName; });
 
-            // Выводим информацию о клиенте после списания бонусов
-            std::cout << "Withdrawal successful!\n";
-            client.displayInfo();
-            return;  // Завершаем выполнение метода после обработки клиента
-        }
+    if (it != clients.end()) {
+        // Если клиент найден, списываем бонусы с его баланса
+        it->withdrawFromBalance(amount);
+
+        // Выводим информацию о клиенте после списания бонусов
+        std::cout << "Withdrawal successful!\n";
+        it->displayInfo();
+    } else {
+        std::cout << "Client not found. Withdrawal failed.\n";
     }
+}
 
-    std::cout << "Client not found.\n";
+void System::displayClientTransactionHistory(const std::string& clientName) const {
+    // Ищем клиента в векторе
+    auto it = std::find_if(clients.begin(), clients.end(),
+                           [&clientName](const Client& client) { return client.getName() == clientName; });
+
+    if (it != clients.end()) {
+        // Если клиент найден, выводим историю операций
+        it->displayInfo();
+    } else {
+        std::cout << "Client not found. Unable to display transaction history.\n";
+    }
 }

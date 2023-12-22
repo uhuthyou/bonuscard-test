@@ -1,6 +1,7 @@
 // main.cpp
 
 #include "system.h"
+#include <iostream>
 
 int main() {
     // Создаем объект системы
@@ -15,34 +16,70 @@ int main() {
 
     // Пытаемся войти в систему
     if (mySystem.login(inputUsername, inputPassword)) {
-        // Если вход успешен, регистрируем клиента
-        mySystem.registerClient();
+        bool exitMenu = false;
+        while (!exitMenu) {
+            // Выводим меню выбора операций
+            std::cout << "\nMenu:\n";
+            std::cout << "1. Add client\n";
+            std::cout << "2. Deposit to client balance\n";
+            std::cout << "3. Withdraw from client balance\n";
+            std::cout << "4. Display client transaction history\n";
+            std::cout << "5. Exit\n";
+            std::cout << "Enter your choice: ";
 
-        // Вводим имя клиента для пополнения баланса
-        std::string clientToDeposit;
-        std::cout << "Enter client name to deposit: ";
-        std::cin >> clientToDeposit;
+            int choice;
+            std::cin >> choice;
 
-        // Вводим количество бонусов для пополнения баланса
-        double depositAmount;
-        std::cout << "Enter deposit amount: ";
-        std::cin >> depositAmount;
+            switch (choice) {
+                case 1: {
+                    // Регистрация нового клиента
+                    mySystem.registerClient();
+                    break;
+                }
+                case 2: {
+                    // Пополнение баланса клиента
+                    std::string clientToDeposit;
+                    std::cout << "Enter client name to deposit: ";
+                    std::cin >> clientToDeposit;
 
-        // Пополняем баланс клиента
-        mySystem.depositToClientBalance(clientToDeposit, depositAmount);
+                    double depositAmount;
+                    std::cout << "Enter deposit amount: ";
+                    std::cin >> depositAmount;
 
-        // Вводим имя клиента для списания бонусов
-        std::string clientToWithdraw;
-        std::cout << "Enter client name to withdraw from: ";
-        std::cin >> clientToWithdraw;
+                    mySystem.depositToClientBalance(clientToDeposit, depositAmount);
+                    break;
+                }
+                case 3: {
+                    // Списание бонусов с баланса клиента
+                    std::string clientToWithdraw;
+                    std::cout << "Enter client name to withdraw from: ";
+                    std::cin >> clientToWithdraw;
 
-        // Вводим количество бонусов для списания
-        double withdrawAmount;
-        std::cout << "Enter withdrawal amount: ";
-        std::cin >> withdrawAmount;
+                    double withdrawAmount;
+                    std::cout << "Enter withdrawal amount: ";
+                    std::cin >> withdrawAmount;
 
-        // Списываем бонусы с баланса клиента
-        mySystem.withdrawFromClientBalance(clientToWithdraw, withdrawAmount);
+                    mySystem.withdrawFromClientBalance(clientToWithdraw, withdrawAmount);
+                    break;
+                }
+                case 4: {
+                    // Вывод детализации операций клиента
+                    std::string clientName;
+                    std::cout << "Enter client name to display transaction history: ";
+                    std::cin >> clientName;
+
+                    mySystem.displayClientTransactionHistory(clientName);
+                    break;
+                }
+                case 5: {
+                    // Выход из программы
+                    exitMenu = true;
+                    break;
+                }
+                default:
+                    std::cout << "Invalid choice. Please enter a valid option.\n";
+            }
+        }
     }
 
     return 0;
