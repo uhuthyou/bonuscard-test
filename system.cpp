@@ -3,6 +3,7 @@
 #include "system.h"
 #include <algorithm>
 #include <iomanip>  // Добавим для форматирования вывода
+#include <fstream> // Для записи в файл
 
 System::System(const std::string& username, const std::string& password)
     : adminUsername(username), adminPassword(password), totalDeposited(0.0), totalWithdrawn(0.0) {}
@@ -18,6 +19,22 @@ bool System::login(const std::string& username, const std::string& password) {
         return false;
     }
 }
+void writeClientToFile(const Client& newClient) {
+    // Открываем файл для записи в конец
+    std::ofstream file("D:/Github rep/bonuscard-test/clients.txt", std::ios::app);
+
+    if (file.is_open()) {
+        // Записываем информацию о новом клиенте
+        file << "Client Name: " << newClient.getName() << "\n";
+        file << "Card Number: " << newClient.getBonusCard().getCardNumber() << "\n";
+        file << "Balance: " << newClient.getBonusCard().getBalance() << "\n\n";
+
+        // Закрываем файл
+        file.close();
+    } else {
+        std::cout << "Unable to open file for writing.\n";
+    }
+}
 
 void System::registerClient() {
     std::string clientName;
@@ -30,6 +47,9 @@ void System::registerClient() {
 
     // Добавляем клиента в вектор
     clients.push_back(newClient);
+
+    //Записываем клиента в файл
+    writeClientToFile(newClient);
 }
 
 void System::displayAllClients() const {
@@ -63,6 +83,34 @@ void System::depositToClientBalance(const std::string& clientName, double amount
         //it->displayInfo();
     } else {
         std::cout << "Client not found. Deposit failed.\n";
+    }
+}
+
+void System::readClientsFromFile() const {
+    std::ifstream file("D:\\Github rep\\bonuscard-test\\clients.txt");
+
+    if (file.is_open()) {
+        std::string line;
+        while (getline(file, line)) {
+            std::cout << line << '\n';
+        }
+        file.close();
+    } else {
+        std::cout << "Unable to open file for reading.\n";
+    }
+}
+
+void System::displayClientsFromFile() const {
+    std::ifstream file("D:\\Github rep\\bonuscard-test\\clients.txt");
+
+    if (file.is_open()) {
+        std::string line;
+        while (getline(file, line)) {
+            std::cout << line << '\n';
+        }
+        file.close();
+    } else {
+        std::cout << "Unable to open file for reading.\n";
     }
 }
 

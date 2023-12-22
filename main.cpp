@@ -81,7 +81,7 @@ int main() {
                 }
                 case 6: {
                     // Вывод информации о всех клиентах
-                    mySystem.displayAllClients();
+                    mySystem.displayClientsFromFile();
                     break;
                 }
                 case 7: {
