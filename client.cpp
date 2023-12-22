@@ -36,6 +36,15 @@ void BonusCard::addToBalance(double amount) {
     balance += amount;
 }
 
+void BonusCard::withdrawFromBalance(double amount) {
+    // Проверка наличия достаточного баланса перед списанием
+    if (balance >= amount) {
+        balance -= amount;
+    } else {
+        std::cout << "Insufficient funds. Withdrawal failed.\n";
+    }
+}
+
 Client::Client(const std::string& clientName) : name(clientName) {}
 
 void Client::registerClient() {
@@ -54,4 +63,13 @@ void Client::displayInfo() const {
 
 BonusCard& Client::getBonusCard() {
     return card;
+}
+
+void Client::withdrawFromBalance(double amount) {
+    // Списываем бонусы с баланса карты
+    card.withdrawFromBalance(amount);
+}
+
+std::string Client::getName() const {
+    return name;
 }

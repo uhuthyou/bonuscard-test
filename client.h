@@ -21,6 +21,7 @@ public:
     int getCardNumber() const;
     double getBalance() const;
     void addToBalance(double amount);
+    void withdrawFromBalance(double amount);
 };
 
 class Client {
@@ -32,7 +33,9 @@ public:
     Client(const std::string& clientName);
     void registerClient();
     void displayInfo() const;
-    BonusCard& getBonusCard(); // Добавим новый метод
+    BonusCard& getBonusCard();
+    void withdrawFromBalance(double amount);
+    std::string getName() const; // Добавим новый метод
 };
 
 #endif // CLIENT_H

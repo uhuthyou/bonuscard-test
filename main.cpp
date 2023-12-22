@@ -30,6 +30,19 @@ int main() {
 
         // Пополняем баланс клиента
         mySystem.depositToClientBalance(clientToDeposit, depositAmount);
+
+        // Вводим имя клиента для списания бонусов
+        std::string clientToWithdraw;
+        std::cout << "Enter client name to withdraw from: ";
+        std::cin >> clientToWithdraw;
+
+        // Вводим количество бонусов для списания
+        double withdrawAmount;
+        std::cout << "Enter withdrawal amount: ";
+        std::cin >> withdrawAmount;
+
+        // Списываем бонусы с баланса клиента
+        mySystem.withdrawFromClientBalance(clientToWithdraw, withdrawAmount);
     }
 
     return 0;

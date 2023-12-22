@@ -23,14 +23,39 @@ void System::registerClient() {
     // Создаем объект клиента и регистрируем его
     Client newClient(clientName);
     newClient.registerClient();
+    clients.push_back(newClient);  // Добавляем зарегистрированного клиента в вектор
 }
 
 void System::depositToClientBalance(const std::string& clientName, double amount) {
-    // Создаем объект клиента и пополняем его баланс
-    Client client(clientName);
-    client.getBonusCard().addToBalance(amount);
+    // Ищем клиента в векторе
+    for (auto& client : clients) {
+        if (client.getName() == clientName) {
+            // Пополняем баланс найденного клиента
+            client.getBonusCard().addToBalance(amount);
 
-    // Выводим информацию о клиенте после пополнения баланса
-    std::cout << "Deposit successful!\n";
-    client.displayInfo();
+            // Выводим информацию о клиенте после пополнения баланса
+            std::cout << "Deposit successful!\n";
+            client.displayInfo();
+            return;  // Завершаем выполнение метода после обработки клиента
+        }
+    }
+
+    std::cout << "Client not found.\n";
+}
+
+void System::withdrawFromClientBalance(const std::string& clientName, double amount) {
+    // Ищем клиента в векторе
+    for (auto& client : clients) {
+        if (client.getName() == clientName) {
+            // Списываем бонусы с баланса найденного клиента
+            client.withdrawFromBalance(amount);
+
+            // Выводим информацию о клиенте после списания бонусов
+            std::cout << "Withdrawal successful!\n";
+            client.displayInfo();
+            return;  // Завершаем выполнение метода после обработки клиента
+        }
+    }
+
+    std::cout << "Client not found.\n";
 }
