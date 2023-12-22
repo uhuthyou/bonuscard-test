@@ -109,6 +109,10 @@ BonusCard& Client::getBonusCard() {
     return card;
 }
 
+const BonusCard& Client::getBonusCard() const {
+    return card;
+}
+
 void Client::withdrawFromBalance(double amount) {
     // Списываем бонусы с баланса карты
     card.withdrawFromBalance(amount);
@@ -116,4 +120,16 @@ void Client::withdrawFromBalance(double amount) {
 
 std::string Client::getName() const {
     return name;
+}
+
+double BonusCard::getTransactionsTotal(Transaction::OperationType operationType) const {
+    double total = 0.0;
+
+    for (const Transaction& transaction : transactions) {
+        if (transaction.operationType == operationType) {
+            total += transaction.amount;
+        }
+    }
+
+    return total;
 }

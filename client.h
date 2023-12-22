@@ -26,9 +26,8 @@ private:
     static int nextCardNumber;
     int cardNumber;
     double balance;
-    std::vector<Transaction> transactions; // Вектор для хранения операций
+    std::vector<Transaction> transactions;
 
-    // Добавим статический метод для генерации уникального номера карты
     static int generateUniqueCardNumber();
 
 public:
@@ -37,7 +36,10 @@ public:
     double getBalance() const;
     void addToBalance(double amount);
     void withdrawFromBalance(double amount);
-    const std::vector<Transaction>& getTransactions() const; // Новый метод
+    const std::vector<Transaction>& getTransactions() const;
+
+    // Новый метод
+    double getTransactionsTotal(Transaction::OperationType operationType) const;
 };
 
 class Client {
@@ -50,6 +52,7 @@ public:
     void registerClient();
     void displayInfo() const;
     BonusCard& getBonusCard();
+    const BonusCard& getBonusCard() const;
     void withdrawFromBalance(double amount);
     std::string getName() const;
 };

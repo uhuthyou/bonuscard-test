@@ -24,7 +24,8 @@ int main() {
             std::cout << "2. Deposit to client balance\n";
             std::cout << "3. Withdraw from client balance\n";
             std::cout << "4. Display client transaction history\n";
-            std::cout << "5. Exit\n";
+            std::cout << "5. Display annual report\n"; // Новая опция
+            std::cout << "6. Exit\n";
             std::cout << "Enter your choice: ";
 
             int choice;
@@ -72,6 +73,11 @@ int main() {
                     break;
                 }
                 case 5: {
+                    // Вывод годового отчета
+                    mySystem.displayAnnualReport();
+                    break;
+                }
+                case 6: {
                     // Выход из программы
                     exitMenu = true;
                     break;
