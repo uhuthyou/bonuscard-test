@@ -12,12 +12,14 @@ private:
     std::string adminUsername;
     std::string adminPassword;
     std::vector<Client> clients;
+
     double totalDeposited;  // Общая сумма начисленных бонусов по всем клиентам
     double totalWithdrawn;  // Общая сумма списанных бонусов по всем клиентам
 
 public:
     System(const std::string& username, const std::string& password);
 
+    void displayAllClients() const;  // Новый метод
     bool login(const std::string& username, const std::string& password);
     void registerClient();
     void depositToClientBalance(const std::string& clientName, double amount);

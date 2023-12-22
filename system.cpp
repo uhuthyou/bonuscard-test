@@ -10,9 +10,11 @@ System::System(const std::string& username, const std::string& password)
 bool System::login(const std::string& username, const std::string& password) {
     if (username == adminUsername && password == adminPassword) {
         std::cout << "Successfully logged in!\n";
+        std::cout << "--------------------------------------------------------------\n";
         return true;
     } else {
         std::cout << "Login failed. Please check your username and password.\n";
+        std::cout << "--------------------------------------------------------------\n";
         return false;
     }
 }
@@ -28,6 +30,23 @@ void System::registerClient() {
 
     // Добавляем клиента в вектор
     clients.push_back(newClient);
+}
+
+void System::displayAllClients() const {
+    if (clients.empty()) {
+        std::cout << "No clients registered yet.\n";
+        return;
+    }
+
+    // Выводим заголовок таблицы
+    std::cout << std::setw(20) << "Client Name" << std::setw(15) << "Card Number" << std::setw(10) << "Balance\n";
+    std::cout << "-----------------------------------------------\n";
+
+    // Выводим информацию о каждом клиенте
+    for (const Client& client : clients) {
+        std::cout << std::setw(20) << client.getName() << std::setw(15) << client.getBonusCard().getCardNumber()
+                  << std::setw(10) << client.getBonusCard().getBalance() << "\n";
+    }
 }
 
 void System::depositToClientBalance(const std::string& clientName, double amount) {
