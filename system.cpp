@@ -6,7 +6,7 @@
 #include <fstream> // Для записи в файл
 
 System::System(const std::string& username, const std::string& password)
-    : adminUsername(username), adminPassword(password), totalDeposited(0.0), totalWithdrawn(0.0) {}
+    : adminUsername(username), adminPassword(password), totalDeposited(0.0), totalWithdrawn(0.0) {System::readClientsFromFile();}
 
 bool System::login(const std::string& username, const std::string& password) {
     if (username == adminUsername && password == adminPassword) {
@@ -21,7 +21,7 @@ bool System::login(const std::string& username, const std::string& password) {
 }
 void writeClientToFile(const Client& newClient) {
     // Открываем файл для записи в конец
-    std::ofstream file("D:/Github rep/bonuscard-test/clients.txt", std::ios::app);
+    std::ofstream file("D:\\Github rep\\bonuscard-test\\clients.txt", std::ios::app);
 
     if (file.is_open()) {
         // Записываем информацию о новом клиенте
@@ -69,35 +69,114 @@ void System::displayAllClients() const {
     }
 }
 
+void System::readClientsFromFile() {
+        std::ifstream file("D:\\Github rep\\bonuscard-test\\clients.txt");
+
+        if (!file.is_open()) {
+            std::cerr << "Unable to open file: " << std::endl;
+            return;
+        }
+
+        std::string line;
+        std::string name;
+        int cardNumber;
+        double balance;
+
+        while (std::getline(file, line)) {
+            if (line.find("Client Name: ") != std::string::npos) {
+                name = line.substr(13);
+            } else if (line.find("Card number: ") != std::string::npos) {
+                cardNumber = std::stoi(line.substr(13));
+            } else if (line.find("Balance: ") != std::string::npos) {
+                balance = std::stod(line.substr(9));
+
+                // Создаем объекты BonusCard и Client и добавляем их в вектор
+                BonusCard card;
+                card.cardNumber = cardNumber;
+                card.balance = balance;
+
+                Client client(name);
+                client.card = card;
+
+                clients.push_back(client);
+            }
+        }
+
+        file.close();
+    }
+
+
 void System::depositToClientBalance(const std::string& clientName, double amount) {
     auto it = std::find_if(clients.begin(), clients.end(),
                            [&clientName](const Client& client) { return client.getName() == clientName; });
 
     if (it != clients.end()) {
-        // Если клиент найден, пополняем его баланс
+        // Пополняем баланс клиента
         it->getBonusCard().addToBalance(amount);
 
         // Обновляем суммарную информацию
         totalDeposited += amount;
         std::cout << "Deposit successful! Updated balance for client " << clientName << ": " << it->getBonusCard().getBalance() << "\n";
-        //it->displayInfo();
+
+        // Обновляем информацию в файле
+        updateClientInFile(*it);
     } else {
         std::cout << "Client not found. Deposit failed.\n";
     }
 }
 
-void System::readClientsFromFile() const {
-    std::ifstream file("D:\\Github rep\\bonuscard-test\\clients.txt");
+void System::withdrawFromClientBalance(const std::string& clientName, double amount) {
+    auto it = std::find_if(clients.begin(), clients.end(),
+                           [&clientName](const Client& client) { return client.getName() == clientName; });
 
-    if (file.is_open()) {
-        std::string line;
-        while (getline(file, line)) {
-            std::cout << line << '\n';
-        }
-        file.close();
+    if (it != clients.end()) {
+        // Пополняем баланс клиента
+        it->getBonusCard().withdrawFromBalance(amount);
+
+        // Обновляем суммарную информацию
+        totalDeposited -= amount;
+        std::cout << "withdraw successful! Updated balance for client " << clientName << ": " << it->getBonusCard().getBalance() << "\n";
+
+        // Обновляем информацию в файле
+        updateClientInFile(*it);
     } else {
-        std::cout << "Unable to open file for reading.\n";
+        std::cout << "Client not found. Deposit failed.\n";
     }
+}
+
+void System::updateClientInFile(const Client& updatedClient) const {
+    std::ifstream inFile("D:\\Github rep\\bonuscard-test\\clients.txt");
+        std::ofstream outFile("D:\\Github rep\\bonuscard-test\\temp.txt");
+        int count = 1;
+
+        if (inFile.is_open() && outFile.is_open()) {
+            std::string line;
+
+            while (getline(inFile, line)) {
+                if (line.find("Client Name: " + updatedClient.getName()) != std::string::npos) {
+                    count = -1;
+                    outFile << line << std::endl;
+                } else {
+                    if ((line.find("Balance: ") != std::string::npos) && (count == 1)) {
+                        outFile << "Balance: " << updatedClient.getBonusCard().getBalance() << std::endl;
+                    }
+                    else {
+                        outFile << line << std::endl;
+                    }
+                }
+                count++;
+            }
+
+            inFile.close();
+            outFile.close();
+
+            remove("D:\\Github rep\\bonuscard-test\\clients.txt");
+            rename("D:\\Github rep\\bonuscard-test\\temp.txt", "D:\\Github rep\\bonuscard-test\\clients.txt");
+
+            std::cout << "Client information updated in file.\n";
+        } else {
+            std::cout << "Unable to open file for updating.\n";
+        }
 }
 
 void System::displayClientsFromFile() const {
@@ -111,23 +190,6 @@ void System::displayClientsFromFile() const {
         file.close();
     } else {
         std::cout << "Unable to open file for reading.\n";
-    }
-}
-
-void System::withdrawFromClientBalance(const std::string& clientName, double amount) {
-    auto it = std::find_if(clients.begin(), clients.end(),
-                           [&clientName](const Client& client) { return client.getName() == clientName; });
-
-    if (it != clients.end()) {
-        // Если клиент найден, списываем бонусы с его баланса
-        it->withdrawFromBalance(amount);
-
-        // Обновляем суммарную информацию
-        totalWithdrawn += amount;
-        std::cout << "Withdrawal successful!\n";        std::cout << "Withdrawal successful! Updated balance for client " << clientName << ": " << it->getBonusCard().getBalance() << "\n";
-        //it->displayInfo();
-    } else {
-        std::cout << "Client not found. Withdrawal failed.\n";
     }
 }
 

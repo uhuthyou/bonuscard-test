@@ -10,15 +10,16 @@ int BonusCard::nextCardNumber = 123456789;
 
 // Статический метод для генерации уникального номера карты
 int BonusCard::generateUniqueCardNumber() {
-    std::vector<int> digits{1, 2, 3, 4, 5, 6, 7, 8, 9};
     std::random_device rd;
-    std::default_random_engine rng(rd());
-    std::shuffle(digits.begin(), digits.end(), rng);
+        std::mt19937 generator(rd());
+        std::uniform_int_distribution<int> distribution(0, 9);
 
-    int uniqueNumber = 0;
-    for (int digit : digits) {
-        uniqueNumber = uniqueNumber * 10 + digit;
-    }
+        // Генерируем случайное 10-значное число
+        long long uniqueNumber = 0;
+            for (int i = 0; i < 10; ++i) {
+                int digit = distribution(generator);
+                uniqueNumber = uniqueNumber * 10 + digit;
+            }
 
     return uniqueNumber;
 }
@@ -132,4 +133,8 @@ double BonusCard::getTransactionsTotal(Transaction::OperationType operationType)
     }
 
     return total;
+}
+
+void BonusCard::setCardNumber(int number) {
+    cardNumber = number;
 }

@@ -12,7 +12,6 @@ private:
     std::string adminUsername;
     std::string adminPassword;
     std::vector<Client> clients;
-    void readClientsFromFile() const;
 
     double totalDeposited;  // Общая сумма начисленных бонусов по всем клиентам
     double totalWithdrawn;  // Общая сумма списанных бонусов по всем клиентам
@@ -28,6 +27,9 @@ public:
     void displayClientTransactionHistory(const std::string& clientName) const;
     void displayAnnualReport() const;  // Новый метод
     void displayClientsFromFile() const;
+    void depositToClientBalance();
+    void updateClientInFile(const Client& updatedClient) const;
+    void readClientsFromFile(); // Обновленное объявление
 };
 
 #endif // SYSTEM_H

@@ -24,19 +24,20 @@ public:
 class BonusCard {
 private:
     static int nextCardNumber;
-    int cardNumber;
-    double balance;
     std::vector<Transaction> transactions;
 
     static int generateUniqueCardNumber();
 
 public:
     BonusCard();
+    int cardNumber;
+    double balance;
     int getCardNumber() const;
     double getBalance() const;
     void addToBalance(double amount);
     void withdrawFromBalance(double amount);
     const std::vector<Transaction>& getTransactions() const;
+    void setCardNumber(int number);
 
     // Новый метод
     double getTransactionsTotal(Transaction::OperationType operationType) const;
@@ -44,11 +45,12 @@ public:
 
 class Client {
 private:
-    std::string name;
-    BonusCard card;
+
 
 public:
     Client(const std::string& clientName);
+    std::string name;
+    BonusCard card;
     void registerClient();
     void displayInfo() const;
     BonusCard& getBonusCard();

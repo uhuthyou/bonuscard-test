@@ -21,12 +21,12 @@ int main() {
         while (!exitMenu) {
             // Выводим меню выбора операций
             std::cout << "\nMenu:\n";
-            std::cout << "1. Add client\n";
-            std::cout << "2. Deposit to client balance\n";
-            std::cout << "3. Withdraw from client balance\n";
+            std::cout << "1. Add client\n"; //+
+            std::cout << "2. Deposit to client balance\n"; //+
+            std::cout << "3. Withdraw from client balance\n"; //+
             std::cout << "4. Display client transaction history\n";
             std::cout << "5. Display annual report\n";
-            std::cout << "6. Display all clients\n";
+            std::cout << "6. Display all clients\n"; //+
             std::cout << "7. Exit\n";
             std::cout << "Enter your choice: ";
 
@@ -39,19 +39,20 @@ int main() {
                     mySystem.registerClient();
                     break;
                 }
-                case 2: {
-                    // Пополнение баланса клиента
-                    std::string clientToDeposit;
-                    std::cout << "Enter client name to deposit: ";
-                    std::cin >> clientToDeposit;
+            case 2: {
+                // Пополнение баланса клиента
+                std::string clientToDeposit;
+                std::cout << "Enter client name to deposit: ";
+                std::cin >> clientToDeposit;
 
-                    double depositAmount;
-                    std::cout << "Enter deposit amount: ";
-                    std::cin >> depositAmount;
+                double depositAmount;
+                std::cout << "Enter deposit amount: ";
+                std::cin >> depositAmount;
 
-                    mySystem.depositToClientBalance(clientToDeposit, depositAmount);
-                    break;
-                }
+                // Вызываем метод depositToClientBalance
+                mySystem.depositToClientBalance(clientToDeposit, depositAmount);
+                break;
+            }
                 case 3: {
                     // Списание бонусов с баланса клиента
                     std::string clientToWithdraw;
