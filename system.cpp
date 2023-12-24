@@ -143,6 +143,41 @@ void System::findClient(const std::string& clientName) const {
     }
 }
 
+void System::recordOperation(const std::string& clientName, char operationType, double amount) {
+    std::ofstream file("D:\\Github rep\\bonuscard-test\\operations.txt", std::ios::app);
+
+    if (file.is_open()) {
+        file << "Client Name: " << clientName << "\n";
+        file << "Operation Type: " << (operationType == '+' ? "Deposit" : "Withdrawal") << "\n";
+        file << "Amount: " << amount << "\n\n";
+
+        file.close();
+    } else {
+        std::cout << "Unable to open file for writing.\n";
+    }
+}
+
+void System::performOperation(const std::string& clientName, char operationType, double amount) {
+    auto it = std::find_if(clients.begin(), clients.end(),
+                           [&clientName](const Client& client) { return client.getName() == clientName; });
+
+    if (it != clients.end()) {
+        if (operationType == '+') {
+            it->getBonusCard().addToBalance(amount);
+            totalDeposited += amount;
+        } else if (operationType == '-') {
+            it->getBonusCard().withdrawFromBalance(amount);
+            totalWithdrawn += amount;
+        }
+
+        updateClientInFile(*it);
+        std::cout << "Operation successful! Updated balance for client " << clientName << ": " << it->getBonusCard().getBalance() << "\n";
+        recordOperation(clientName, operationType, amount);
+    } else {
+        std::cout << "Client not found. Operation failed.\n";
+    }
+}
+
 void System::depositToClientBalance(const std::string& clientName, double amount) {
     auto it = std::find_if(clients.begin(), clients.end(),
                            [&clientName](const Client& client) { return client.getName() == clientName; });

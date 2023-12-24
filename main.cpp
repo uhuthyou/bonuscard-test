@@ -3,6 +3,7 @@
 #include "system.h"
 #include <iostream>
 
+
 int main() {
     // Создаем объект системы
     System mySystem("1", "1");
@@ -29,6 +30,7 @@ int main() {
             std::cout << "6. Display all clients\n"; //+
             std::cout << "7. Find client\n"; //+
             std::cout << "8. Exit\n";
+            std::cout << "9. Operation test\n";
             std::cout << "Enter your choice: ";
 
             int choice;
@@ -86,21 +88,39 @@ int main() {
                     mySystem.displayClientsFromFile();
                     break;
                 }
-                case 7: {
+            case 7: {
                 // Поиск клиента
                 std::string clientToFind;
-                    std::cout << "Enter client name to find: ";
-                    std::cin >> clientToFind;
+                std::cout << "Enter client name to find: ";
+                std::cin >> clientToFind;
 
-                    mySystem.findClient(clientToFind);
-                    break;
+                mySystem.findClient(clientToFind);
                 break;
-                }
+            }
                 case 8: {
                     // Выход из программы
                     exitMenu = true;
                     break;
                 }
+            case 9: {
+                // Запись операции в файл
+                std::string clientForOperation;
+                char operationType;
+                double operationAmount;
+
+                std::cout << "Enter client name: ";
+                std::cin >> clientForOperation;
+
+                std::cout << "Enter operation type (+ for deposit, - for withdrawal): ";
+                std::cin >> operationType;
+
+                std::cout << "Enter operation amount: ";
+                std::cin >> operationAmount;
+
+                mySystem.performOperation(clientForOperation, operationType, operationAmount);
+                break;
+            }
+
                 default:
                     std::cout << "Invalid choice. Please enter a valid option.\n";
             }

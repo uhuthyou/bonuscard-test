@@ -1,0 +1,8 @@
+Client Name: SERIY
+Operation Type: Deposit
+Amount: 10
+
+Client Name: SERIY
+Operation Type: Withdrawal
+Amount: 10
+
