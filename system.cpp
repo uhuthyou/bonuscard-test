@@ -192,6 +192,7 @@ void System::displayClientOperationHistory(const std::string& clientName) const 
             } else if (isClientFound && (line.find("Client Name: ") != std::string::npos)) {
                 std::getline(file, line);
                 std::getline(file, line);
+                std::getline(file, line);
             } else if (isClientFound) {
                 // Выводим строки с информацией об операции для найденного клиента
                 std::cout << line << '\n';
