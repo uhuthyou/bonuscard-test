@@ -1,52 +1,45 @@
-Client Name: SERIY
+Client Name: Matvey
+Card Number: 1059244977
 Operation Type: Deposit
-Amount: 10
+Amount: 500
 
-Client Name: SERIY
+Client Name: Milena
+Card Number: 1156735232
+Operation Type: Deposit
+Amount: 350
+
+Client Name: Dasha
+Card Number: 1355150740
+Operation Type: Deposit
+Amount: 20
+
+Client Name: Matvey
+Card Number: 1059244977
 Operation Type: Withdrawal
-Amount: 10
+Amount: 150
 
-Client Name: SERIY
-Operation Type: Deposit
-Amount: 25
-
-Client Name: SERIY
-Operation Type: Deposit
-Amount: 10
-
-Client Name: SERIY
+Client Name: Milena
+Card Number: 1156735232
 Operation Type: Withdrawal
-Amount: 50
-
-Client Name: TEST
-Operation Type: Deposit
 Amount: 100
 
-Client Name: Q
+Client Name: Dasha
+Card Number: 1355150740
+Operation Type: Withdrawal
+Amount: 20
+
+Client Name: Matvey
+Card Number: 1059244977
+Operation Type: Deposit
+Amount: 200
+
+Client Name: Ilya
+Card Number: 1288421117
+Operation Type: Deposit
+Amount: 1000
+
+Client Name: TEST
+Card Number: 1038254146
 Operation Type: Deposit
 Amount: 10
-
-Client Name: Q
-Operation Type: Withdrawal
-Amount: 5
-
-Client Name: R
-Operation Type: Deposit
-Amount: 10
-
-Client Name: Q
-Operation Type: Deposit
-Amount: 10
-
-Client Name: R
-Operation Type: Withdrawal
-Amount: 1
-
-Client Name: R
-Operation Type: Withdrawal
-Amount: 3
-
-Client Name: Q
-Operation Type: Deposit
-Amount: 6
 

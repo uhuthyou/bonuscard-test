@@ -4,6 +4,7 @@
 #include <algorithm>
 #include <iomanip>  // Добавим для форматирования вывода
 #include <fstream> // Для записи в файл
+#include <map>
 
 System::System(const std::string& username, const std::string& password)
     : adminUsername(username), adminPassword(password), totalDeposited(0.0), totalWithdrawn(0.0) {System::readClientsFromFile();}
@@ -143,17 +144,52 @@ void System::findClient(const std::string& clientName) const {
     }
 }
 
-void System::recordOperation(const std::string& clientName, char operationType, double amount) {
-    std::ofstream file("D:\\Github rep\\bonuscard-test\\operations.txt", std::ios::app);
+int System::findCardNumberByName(const std::string& clientName) const {
+    std::ifstream file("D:\\Github rep\\bonuscard-test\\clients.txt");
 
     if (file.is_open()) {
-        file << "Client Name: " << clientName << "\n";
-        file << "Operation Type: " << (operationType == '+' ? "Deposit" : "Withdrawal") << "\n";
-        file << "Amount: " << amount << "\n\n";
+        std::string line;
+        int cardNumber = -1;
+
+        while (std::getline(file, line)) {
+            if (line.find("Client Name: " + clientName) != std::string::npos) {
+                // Найден клиент, теперь найдем номер его бонусной карты
+                while (std::getline(file, line)) {
+                    if (line.find("Card Number: ") != std::string::npos) {
+                        cardNumber = std::stoi(line.substr(13));
+                        break;
+                    }
+                }
+                break;
+            }
+        }
 
         file.close();
+        return cardNumber;
     } else {
-        std::cout << "Unable to open file for writing.\n";
+        std::cout << "Unable to open file for reading.\n";
+        return -1;
+    }
+}
+
+void System::recordOperation(const std::string& clientName, char operationType, double amount) {
+    int cardNumber = findCardNumberByName(clientName);
+
+    if (cardNumber != -1) {
+        std::ofstream file("D:\\Github rep\\bonuscard-test\\operations.txt", std::ios::app);
+
+        if (file.is_open()) {
+            file << "Client Name: " << clientName << "\n";
+            file << "Card Number: " << cardNumber << "\n";
+            file << "Operation Type: " << (operationType == '+' ? "Deposit" : "Withdrawal") << "\n";
+            file << "Amount: " << amount << "\n\n";
+
+            file.close();
+        } else {
+            std::cout << "Unable to open file for writing.\n";
+        }
+    } else {
+        std::cout << "Client not found. Unable to record operation.\n";
     }
 }
 
@@ -182,32 +218,39 @@ void System::displayClientOperationHistory(const std::string& clientName) const 
     std::ifstream file("D:\\Github rep\\bonuscard-test\\operations.txt");
 
     if (file.is_open()) {
-        std::string line;
-        bool isClientFound = false;
+            std::string line;
+            bool isClientFound = false;
+            std::string operationType;
+            std::string amount;
+            std::cout << std::setw(20) << "Operation type" << " | " << std::setw(10) << "Amount" << '\n';
+            while (std::getline(file, line)) {
+                if (line.find("Client Name: " + clientName) != std::string::npos) {
+                    isClientFound = true;
+                    std::cout << std::string(40, '-') << '\n';  // Выводим разделитель
+                } else if (isClientFound && (line.find("Client Name: ") != std::string::npos)) {
+                  std::getline(file, line);
+                  std::getline(file, line);
+                  std::getline(file, line);
 
-        while (std::getline(file, line)) {
-            if (line.find("Client Name: " + clientName) != std::string::npos) {
-                isClientFound = true;
-                std::cout << line << '\n';  // Выводим строку с именем клиента
-            } else if (isClientFound && (line.find("Client Name: ") != std::string::npos)) {
-                std::getline(file, line);
-                std::getline(file, line);
-                std::getline(file, line);
-            } else if (isClientFound) {
-                // Выводим строки с информацией об операции для найденного клиента
-                std::cout << line << '\n';
+                } else if (isClientFound) {
+                    if (line.find("Operation Type: ") != std::string::npos) {
+                        operationType = line.substr(line.find(": ") + 2);  // Извлекаем тип операции
+                    } else if (line.find("Amount: ") != std::string::npos) {
+                        amount = line.substr(line.find(": ") + 2);  // Извлекаем количество баллов
+                        std::cout << std::setw(20) << operationType << " | " << std::setw(10) << amount << '\n';  // Выводим строку таблицы
+                    }
+                }
             }
-        }
 
-        if (!isClientFound) {
-            std::cout << "Client not found in the operation history.\n";
-        }
+            if (!isClientFound) {
+                std::cout << "Client not found in the operation history.\n";
+            }
 
-        file.close();
-    } else {
-        std::cout << "Unable to open file for reading.\n";
+            file.close();
+        } else {
+            std::cout << "Unable to open file for reading.\n";
+        }
     }
-}
 
 void System::displayClientSummary(const std::string& clientName) const {
     auto it = std::find_if(clients.begin(), clients.end(),
@@ -309,16 +352,30 @@ void System::displayClientsFromFile() const {
     std::ifstream file("D:\\Github rep\\bonuscard-test\\clients.txt");
 
     if (file.is_open()) {
-        std::string line;
-        while (getline(file, line)) {
-            std::cout << line << '\n';
-        }
-        file.close();
-    } else {
-        std::cout << "Unable to open file for reading.\n";
-    }
-}
+            std::string line;
+            std::string clientName;
+            std::string cardNumber;
+            std::string balance;
 
+            std::cout << std::setw(20) << "Client Name" << " | " << std::setw(20) << "Card Number" << " | " << std::setw(10) << "Balance" << '\n';
+            std::cout << std::string(60, '-') << '\n';  // Выводим разделитель
+
+            while (getline(file, line)) {
+                if (line.find("Client Name: ") != std::string::npos) {
+                    clientName = line.substr(line.find(": ") + 2);  // Извлекаем имя клиента
+                } else if (line.find("Card Number: ") != std::string::npos) {
+                    cardNumber = line.substr(line.find(": ") + 2);  // Извлекаем номер карты
+                } else if (line.find("Balance: ") != std::string::npos) {
+                    balance = line.substr(line.find(": ") + 2);  // Извлекаем баланс
+                    std::cout << std::setw(20) << clientName << " | " << std::setw(20) << cardNumber << " | " << std::setw(10) << balance << '\n';  // Выводим строку таблицы
+                }
+            }
+
+            file.close();
+        } else {
+            std::cout << "Unable to open file for reading.\n";
+        }
+    }
 void System::displayClientTransactionHistory(const std::string& clientName) const {
     auto it = std::find_if(clients.begin(), clients.end(),
                            [&clientName](const Client& client) { return client.getName() == clientName; });
@@ -330,22 +387,105 @@ void System::displayClientTransactionHistory(const std::string& clientName) cons
     }
 }
 
-void System::displayAnnualReport() const {
-    // Выводим заголовок таблицы
-    std::cout << std::setw(20) << "Client Name" << std::setw(15) << "Card Number" << std::setw(20) << "Total Deposited"
-              << std::setw(20) << "Total Withdrawn" << std::setw(20) << "Current Balance\n";
-    std::cout << "--------------------------------------------------------------------------------\n";
+/*void System::displayAnnualReport() const { //НЕТУ НОМЕРА КАРТЫ
+    std::ifstream file("D:\\Github rep\\bonuscard-test\\operations.txt");
 
-    // Выводим информацию о каждом клиенте
-    for (const auto& client : clients) {
-        const BonusCard& bonusCard = client.getBonusCard();
-        std::cout << std::setw(20) << client.getName() << std::setw(15) << bonusCard.getCardNumber()
-                  << std::setw(20) << bonusCard.getTransactionsTotal(Transaction::OperationType::Deposit)
-                  << std::setw(20) << bonusCard.getTransactionsTotal(Transaction::OperationType::Withdrawal)
-                  << std::setw(20) << bonusCard.getBalance() << "\n";
+    if (file.is_open()) {
+        std::string line;
+        std::string clientName;
+        std::string operationType;
+        std::string amount;
+        std::map<std::string, std::tuple<int, double, double>> clientOperations;  // Карта для хранения операций каждого клиента
+
+        while (std::getline(file, line)) {
+            if (line.find("Client Name: ") != std::string::npos) {
+                clientName = line.substr(line.find(": ") + 2);  // Извлекаем имя клиента
+            } else if (line.find("Card Number: ") != std::string::npos) {
+                int cardNumber = std::stoi(line.substr(line.find(": ") + 2));  // Извлекаем номер карты клиента
+                clientOperations[clientName] = std::make_tuple(cardNumber, 0.0, 0.0);
+            } else if (line.find("Operation Type: ") != std::string::npos) {
+                operationType = line.substr(line.find(": ") + 2);  // Извлекаем тип операции
+            } else if (line.find("Amount: ") != std::string::npos) {
+                amount = line.substr(line.find(": ") + 2);  // Извлекаем количество баллов
+                if (operationType == "Deposit") {
+                    std::get<1>(clientOperations[clientName]) += std::stod(amount);
+                } else if (operationType == "Withdrawal") {
+                    std::get<2>(clientOperations[clientName]) += std::stod(amount);
+                }
+            }
+        }
+
+        std::cout << std::setw(20) << "Client Name" << " | " << std::setw(20) << "Card number" << " | "
+                  << std::setw(10) << "Deposit" << " | " << std::setw(10) << "Widthdraw" << " | "
+                  << std::setw(20) << "Balance" << '\n';
+        std::cout << std::string(90, '-') << '\n';  // Выводим разделитель
+
+        double totalDeposited = 0;
+        double totalWithdrawn = 0;
+
+        for (const auto& client : clientOperations) {
+            totalDeposited += std::get<1>(client.second);
+            totalWithdrawn += std::get<2>(client.second);
+            std::cout << std::setw(20) << client.first << " | " << std::setw(20) << std::get<0>(client.second)
+                      << " | " << std::setw(10) << std::get<1>(client.second) << " | "
+                      << std::setw(10) << std::get<2>(client.second) << " | "
+                      << std::setw(20) << (std::get<1>(client.second) - std::get<2>(client.second)) << '\n';  // Выводим строку таблицы
+        }
+
+        std::cout << "All deposit: " << totalDeposited << '\n';
+        std::cout << "All widthdraw: " << totalWithdrawn << '\n';
+
+        file.close();
+    } else {
+        std::cout << "Unable to open file for reading.\n";
     }
+}*/
 
-    // Выводим информацию о суммарных начислениях и списаниях
-    std::cout << "\nTotal Deposited: " << totalDeposited << "\n";
-    std::cout << "Total Withdrawn: " << totalWithdrawn << "\n";
+void System::displayAnnualReport() const {
+    std::ifstream file("D:\\Github rep\\bonuscard-test\\operations.txt");
+
+    if (file.is_open()) {
+        std::string line;
+        std::string clientName;
+        int cardNumber = 0;  // Инициализируем cardNumber значением по умолчанию
+        std::string operationType;
+        std::string amount;
+        std::map<std::pair<std::string, int>, std::pair<double, double>> clientOperations;  // Изменяем структуру хранения операций каждого клиента
+
+        while (std::getline(file, line)) {
+            if (line.find("Client Name: ") != std::string::npos) {
+                clientName = line.substr(line.find(": ") + 2);  // Извлекаем имя клиента
+            } else if (line.find("Card Number: ") != std::string::npos) {
+                cardNumber = std::stoi(line.substr(line.find(": ") + 2));  // Извлекаем номер карты
+            } else if (line.find("Operation Type: ") != std::string::npos) {
+                operationType = line.substr(line.find(": ") + 2);  // Извлекаем тип операции
+            } else if (line.find("Amount: ") != std::string::npos) {
+                amount = line.substr(line.find(": ") + 2);  // Извлекаем количество баллов
+                if (operationType == "Deposit") {
+                    clientOperations[{clientName, cardNumber}].first += std::stod(amount);
+                } else if (operationType == "Withdrawal") {
+                    clientOperations[{clientName, cardNumber}].second += std::stod(amount);
+                }
+            }
+        }
+
+        std::cout << std::setw(20) << "Client Name" << " | " << std::setw(20) << "Card Number" << " | " << std::setw(10) << "Deposit" << " | " << std::setw(10) << "Withdraw" << " | " << std::setw(20) << "Balance" << '\n';
+        std::cout << std::string(90, '-') << '\n';  // Выводим разделитель
+
+        double totalDeposited = 0;
+        double totalWithdrawn = 0;
+
+        for (const auto& client : clientOperations) {
+            totalDeposited += client.second.first;
+            totalWithdrawn += client.second.second;
+            std::cout << std::setw(20) << client.first.first << " | " << std::setw(20) << client.first.second << " | " << std::setw(10) << client.second.first << " | " << std::setw(10) << client.second.second << " | " << std::setw(20) << (client.second.first - client.second.second) << '\n';  // Выводим строку таблицы
+        }
+
+        std::cout << "Total Deposit: " << totalDeposited << '\n';
+        std::cout << "Total Withdraw: " << totalWithdrawn << '\n';
+
+        file.close();
+    } else {
+        std::cout << "Unable to open file for reading.\n";
+    }
 }
