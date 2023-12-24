@@ -38,6 +38,8 @@ public:
 
     void displayClientOperations(const std::string& clientName) const;
     void displayClientOperationHistory(const std::string& clientName) const;
+
+    int findCardNumberByName(const std::string& clientName) const;
 };
 
 #endif // SYSTEM_H

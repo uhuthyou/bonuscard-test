@@ -1,24 +1,12 @@
-Client Name: N
-Card Number: 219643578
+Client Name: Matvey
+Card Number: 1059244977
+Balance: 550
+
+Client Name: Milena
+Card Number: 1156735232
+Balance: 250
+
+Client Name: Dasha
+Card Number: 1355150740
 Balance: 0
-
-Client Name: ZARABOTAI
-Card Number: 219643578
-Balance: 15
-
-Client Name: rabataet
-Card Number: 219643578
-Balance: 2
-
-Client Name: TEST
-Card Number: 1404047447
-Balance: 100
-
-Client Name: Q
-Card Number: 1087254288
-Balance: 21
-
-Client Name: R
-Card Number: 1099169781
-Balance: 6
 
