@@ -3,6 +3,7 @@
 #include "system.h"
 #include <iostream>
 
+
 int main() {
     // Создаем объект системы
     System mySystem("1", "1");
@@ -21,13 +22,15 @@ int main() {
         while (!exitMenu) {
             // Выводим меню выбора операций
             std::cout << "\nMenu:\n";
-            std::cout << "1. Add client\n";
-            std::cout << "2. Deposit to client balance\n";
-            std::cout << "3. Withdraw from client balance\n";
+            std::cout << "1. Add client\n"; //+
+            std::cout << "2. Deposit to client balance\n"; //+
+            std::cout << "3. Withdraw from client balance\n"; //+
             std::cout << "4. Display client transaction history\n";
             std::cout << "5. Display annual report\n";
-            std::cout << "6. Display all clients\n";
-            std::cout << "7. Exit\n";
+            std::cout << "6. Display all clients\n"; //+
+            std::cout << "7. Find client\n"; //+
+            std::cout << "8. Exit\n";
+            std::cout << "9. Operation test\n";
             std::cout << "Enter your choice: ";
 
             int choice;
@@ -39,19 +42,20 @@ int main() {
                     mySystem.registerClient();
                     break;
                 }
-                case 2: {
-                    // Пополнение баланса клиента
-                    std::string clientToDeposit;
-                    std::cout << "Enter client name to deposit: ";
-                    std::cin >> clientToDeposit;
+            case 2: {
+                // Пополнение баланса клиента
+                std::string clientToDeposit;
+                std::cout << "Enter client name to deposit: ";
+                std::cin >> clientToDeposit;
 
-                    double depositAmount;
-                    std::cout << "Enter deposit amount: ";
-                    std::cin >> depositAmount;
+                double depositAmount;
+                std::cout << "Enter deposit amount: ";
+                std::cin >> depositAmount;
 
-                    mySystem.depositToClientBalance(clientToDeposit, depositAmount);
-                    break;
-                }
+                // Вызываем метод depositToClientBalance
+                mySystem.depositToClientBalance(clientToDeposit, depositAmount);
+                break;
+            }
                 case 3: {
                     // Списание бонусов с баланса клиента
                     std::string clientToWithdraw;
@@ -65,15 +69,15 @@ int main() {
                     mySystem.withdrawFromClientBalance(clientToWithdraw, withdrawAmount);
                     break;
                 }
-                case 4: {
-                    // Вывод детализации операций клиента
-                    std::string clientName;
-                    std::cout << "Enter client name to display transaction history: ";
-                    std::cin >> clientName;
+            case 4: {
+                // Вывод истории операций для конкретного клиента
+                    std::string clientForHistory;
+                    std::cout << "Enter client name: ";
+                    std::cin >> clientForHistory;
 
-                    mySystem.displayClientTransactionHistory(clientName);
+                    mySystem.displayClientOperationHistory(clientForHistory);
                     break;
-                }
+            }
                 case 5: {
                     // Вывод годового отчета
                     mySystem.displayAnnualReport();
@@ -81,14 +85,42 @@ int main() {
                 }
                 case 6: {
                     // Вывод информации о всех клиентах
-                    mySystem.displayAllClients();
+                    mySystem.displayClientsFromFile();
                     break;
                 }
-                case 7: {
+            case 7: {
+                // Поиск клиента
+                std::string clientToFind;
+                std::cout << "Enter client name to find: ";
+                std::cin >> clientToFind;
+
+                mySystem.findClient(clientToFind);
+                break;
+            }
+                case 8: {
                     // Выход из программы
                     exitMenu = true;
                     break;
                 }
+            case 9: {
+                // Запись операции в файл
+                std::string clientForOperation;
+                char operationType;
+                double operationAmount;
+
+                std::cout << "Enter client name: ";
+                std::cin >> clientForOperation;
+
+                std::cout << "Enter operation type (+ for deposit, - for withdrawal): ";
+                std::cin >> operationType;
+
+                std::cout << "Enter operation amount: ";
+                std::cin >> operationAmount;
+
+                mySystem.performOperation(clientForOperation, operationType, operationAmount);
+                break;
+            }
+
                 default:
                     std::cout << "Invalid choice. Please enter a valid option.\n";
             }

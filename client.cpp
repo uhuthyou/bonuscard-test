@@ -2,26 +2,23 @@
 
 #include "client.h"
 #include <algorithm> // Добавим для std::shuffle
-#include <random>    // Добавим для std::default_random_engine
+//#include <random>    // Добавим для std::default_random_engine
 #include <iomanip>   // Добавим для форматирования вывода
+#include <ctime>
+#include <cstdlib>
 
 // Инициализация статической переменной для уникального номера карты
 int BonusCard::nextCardNumber = 123456789;
 
 // Статический метод для генерации уникального номера карты
 int BonusCard::generateUniqueCardNumber() {
-    std::vector<int> digits{1, 2, 3, 4, 5, 6, 7, 8, 9};
-    std::random_device rd;
-    std::default_random_engine rng(rd());
-    std::shuffle(digits.begin(), digits.end(), rng);
+    std::mt19937 generator(static_cast<unsigned int>(std::time(nullptr)));
+            std::uniform_int_distribution<int> distribution(1000000000, 9999999999);
 
-    int uniqueNumber = 0;
-    for (int digit : digits) {
-        uniqueNumber = uniqueNumber * 10 + digit;
-    }
+            int uniqueNumber = distribution(generator);
 
-    return uniqueNumber;
-}
+            return uniqueNumber;
+        }
 
 BonusCard::BonusCard() : cardNumber(generateUniqueCardNumber()), balance(0.0) {}
 
@@ -132,4 +129,8 @@ double BonusCard::getTransactionsTotal(Transaction::OperationType operationType)
     }
 
     return total;
+}
+
+void BonusCard::setCardNumber(int number) {
+    cardNumber = number;
 }

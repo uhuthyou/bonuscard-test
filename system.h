@@ -26,6 +26,19 @@ public:
     void withdrawFromClientBalance(const std::string& clientName, double amount);
     void displayClientTransactionHistory(const std::string& clientName) const;
     void displayAnnualReport() const;  // Новый метод
+    void displayClientsFromFile() const;
+    void depositToClientBalance();
+    void updateClientInFile(const Client& updatedClient) const;
+    void readClientsFromFile(); // Обновленное объявление
+    void findClient(const std::string& clientName) const;
+    void recordOperation(const std::string& clientName, char operationType, double amount);
+    void performOperation(const std::string& clientName, char operationType, double amount);
+
+    void displayClientSummary(const std::string& clientName) const;
+   // void readOperationsFromFile();
+
+    void displayClientOperations(const std::string& clientName) const;
+    void displayClientOperationHistory(const std::string& clientName) const;
 };
 
 #endif // SYSTEM_H
