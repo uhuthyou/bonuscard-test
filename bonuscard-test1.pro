@@ -13,5 +13,7 @@ qtcAddDeployment()
 
 HEADERS += \
     system.h \
-    client.h
+    client.h \
+    transaction.h \
+    bonuscard.h
 
