@@ -30,3 +30,23 @@ Client Name: Q
 Operation Type: Withdrawal
 Amount: 5
 
+Client Name: R
+Operation Type: Deposit
+Amount: 10
+
+Client Name: Q
+Operation Type: Deposit
+Amount: 10
+
+Client Name: R
+Operation Type: Withdrawal
+Amount: 1
+
+Client Name: R
+Operation Type: Withdrawal
+Amount: 3
+
+Client Name: Q
+Operation Type: Deposit
+Amount: 6
+

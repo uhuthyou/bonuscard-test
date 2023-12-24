@@ -16,5 +16,9 @@ Balance: 100
 
 Client Name: Q
 Card Number: 1087254288
-Balance: 5
+Balance: 21
+
+Client Name: R
+Card Number: 1099169781
+Balance: 6
 

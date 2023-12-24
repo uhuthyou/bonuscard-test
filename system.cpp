@@ -178,42 +178,6 @@ void System::performOperation(const std::string& clientName, char operationType,
     }
 }
 
-/*void System::readOperationsFromFile() {
-    std::ifstream file("D:\\Github rep\\bonuscard-test\\operations.txt");
-
-    if (!file.is_open()) {
-        std::cerr << "Unable to open operations file.\n";
-        return;
-    }
-
-    std::string line;
-    while (std::getline(file, line)) {
-        if (line.find("Client Name: ") != std::string::npos) {
-            std::string clientName = line.substr(13);
-
-            auto it = std::find_if(clients.begin(), clients.end(),
-                                   [&clientName](const Client& client) { return client.getName() == clientName; });
-
-            if (it != clients.end()) {
-                it->getBonusCard().addToBalance(0.0);  // Just to initialize the transactions vector
-            }
-        } else if (line.find("Operation Type: ") != std::string::npos) {
-            std::string operationType = line.substr(17);
-            char op = (operationType == "Deposit") ? '+' : '-';
-
-            std::getline(file, line); // Skip the "Amount: " line
-            double amount = std::stod(line);
-
-            if (!clients.empty()) {
-                clients.back().getBonusCard().addToBalance(0.0);  // Just to initialize the transactions vector
-                performOperation(clients.back().getName(), op, amount);
-            }
-        }
-    }
-
-    file.close();
-}*/
-
 void System::displayClientOperationHistory(const std::string& clientName) const {
     std::ifstream file("D:\\Github rep\\bonuscard-test\\operations.txt");
 
@@ -226,7 +190,8 @@ void System::displayClientOperationHistory(const std::string& clientName) const 
                 isClientFound = true;
                 std::cout << line << '\n';  // Выводим строку с именем клиента
             } else if (isClientFound && (line.find("Client Name: ") != std::string::npos)) {
-                break;  // Прекращаем вывод, если нашли следующего клиента
+                std::getline(file, line);
+                std::getline(file, line);
             } else if (isClientFound) {
                 // Выводим строки с информацией об операции для найденного клиента
                 std::cout << line << '\n';

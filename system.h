@@ -35,7 +35,6 @@ public:
     void performOperation(const std::string& clientName, char operationType, double amount);
 
     void displayClientSummary(const std::string& clientName) const;
-   // void readOperationsFromFile();
 
     void displayClientOperations(const std::string& clientName) const;
     void displayClientOperationHistory(const std::string& clientName) const;
