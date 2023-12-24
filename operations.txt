@@ -6,3 +6,27 @@ Client Name: SERIY
 Operation Type: Withdrawal
 Amount: 10
 
+Client Name: SERIY
+Operation Type: Deposit
+Amount: 25
+
+Client Name: SERIY
+Operation Type: Deposit
+Amount: 10
+
+Client Name: SERIY
+Operation Type: Withdrawal
+Amount: 50
+
+Client Name: TEST
+Operation Type: Deposit
+Amount: 100
+
+Client Name: Q
+Operation Type: Deposit
+Amount: 10
+
+Client Name: Q
+Operation Type: Withdrawal
+Amount: 5
+

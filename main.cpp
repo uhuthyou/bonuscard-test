@@ -69,15 +69,15 @@ int main() {
                     mySystem.withdrawFromClientBalance(clientToWithdraw, withdrawAmount);
                     break;
                 }
-                case 4: {
-                    // Вывод детализации операций клиента
-                    std::string clientName;
-                    std::cout << "Enter client name to display transaction history: ";
-                    std::cin >> clientName;
+            case 4: {
+                // Вывод истории операций для конкретного клиента
+                    std::string clientForHistory;
+                    std::cout << "Enter client name: ";
+                    std::cin >> clientForHistory;
 
-                    mySystem.displayClientTransactionHistory(clientName);
+                    mySystem.displayClientOperationHistory(clientForHistory);
                     break;
-                }
+            }
                 case 5: {
                     // Вывод годового отчета
                     mySystem.displayAnnualReport();
