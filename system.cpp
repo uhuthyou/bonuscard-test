@@ -447,10 +447,10 @@ void System::displayAnnualReport() const {
     if (file.is_open()) {
         std::string line;
         std::string clientName;
-        int cardNumber;  // Добавляем переменную для хранения номера карты
+        int cardNumber = 0;  // Инициализируем cardNumber значением по умолчанию
         std::string operationType;
         std::string amount;
-        std::map<std::string, std::tuple<int, double, double>> clientOperations;  // Изменяем структуру хранения операций каждого клиента
+        std::map<std::pair<std::string, int>, std::pair<double, double>> clientOperations;  // Изменяем структуру хранения операций каждого клиента
 
         while (std::getline(file, line)) {
             if (line.find("Client Name: ") != std::string::npos) {
@@ -462,9 +462,9 @@ void System::displayAnnualReport() const {
             } else if (line.find("Amount: ") != std::string::npos) {
                 amount = line.substr(line.find(": ") + 2);  // Извлекаем количество баллов
                 if (operationType == "Deposit") {
-                    std::get<1>(clientOperations[clientName]) += std::stod(amount);
+                    clientOperations[{clientName, cardNumber}].first += std::stod(amount);
                 } else if (operationType == "Withdrawal") {
-                    std::get<2>(clientOperations[clientName]) += std::stod(amount);
+                    clientOperations[{clientName, cardNumber}].second += std::stod(amount);
                 }
             }
         }
@@ -476,9 +476,9 @@ void System::displayAnnualReport() const {
         double totalWithdrawn = 0;
 
         for (const auto& client : clientOperations) {
-            totalDeposited += std::get<1>(client.second);
-            totalWithdrawn += std::get<2>(client.second);
-            std::cout << std::setw(20) << client.first << " | " << std::setw(20) << std::get<0>(client.second) << " | " << std::setw(10) << std::get<1>(client.second) << " | " << std::setw(10) << std::get<2>(client.second) << " | " << std::setw(20) << (std::get<1>(client.second) - std::get<2>(client.second)) << '\n';  // Выводим строку таблицы
+            totalDeposited += client.second.first;
+            totalWithdrawn += client.second.second;
+            std::cout << std::setw(20) << client.first.first << " | " << std::setw(20) << client.first.second << " | " << std::setw(10) << client.second.first << " | " << std::setw(10) << client.second.second << " | " << std::setw(20) << (client.second.first - client.second.second) << '\n';  // Выводим строку таблицы
         }
 
         std::cout << "Total Deposit: " << totalDeposited << '\n';
