@@ -105,6 +105,43 @@ void System::readClientsFromFile() {
         file.close();
     }
 
+void System::findClient(const std::string& clientName) const {
+    std::ifstream file("D:\\Github rep\\bonuscard-test\\clients.txt");
+
+    if (file.is_open()) {
+        std::string line;
+        bool found = false;
+
+        while (getline(file, line)) {
+            if (line.find("Client Name: " + clientName) != std::string::npos) {
+                found = true;
+
+                // Выводим заголовок таблицы
+                std::cout << std::setw(20) << "Client Name" << std::setw(15) << "Card Number" << std::setw(10) << "Balance\n";
+                std::cout << "-----------------------------------------------\n";
+
+                // Выводим информацию о клиенте
+                std::cout << std::setw(20) << clientName;
+
+                for (int i = 0; i < 2; ++i) {
+                    getline(file, line);
+                    std::cout << std::setw(15) << line.substr(line.find(": ") + 2);
+                }
+
+                std::cout << "\n";
+                break;
+            }
+        }
+
+        if (!found) {
+            std::cout << "Client not found.\n";
+        }
+
+        file.close();
+    } else {
+        std::cout << "Unable to open file for reading.\n";
+    }
+}
 
 void System::depositToClientBalance(const std::string& clientName, double amount) {
     auto it = std::find_if(clients.begin(), clients.end(),

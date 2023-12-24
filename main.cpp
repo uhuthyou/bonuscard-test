@@ -27,7 +27,8 @@ int main() {
             std::cout << "4. Display client transaction history\n";
             std::cout << "5. Display annual report\n";
             std::cout << "6. Display all clients\n"; //+
-            std::cout << "7. Exit\n";
+            std::cout << "7. Find client\n"; //+
+            std::cout << "8. Exit\n";
             std::cout << "Enter your choice: ";
 
             int choice;
@@ -86,6 +87,16 @@ int main() {
                     break;
                 }
                 case 7: {
+                // Поиск клиента
+                std::string clientToFind;
+                    std::cout << "Enter client name to find: ";
+                    std::cin >> clientToFind;
+
+                    mySystem.findClient(clientToFind);
+                    break;
+                break;
+                }
+                case 8: {
                     // Выход из программы
                     exitMenu = true;
                     break;

@@ -30,6 +30,7 @@ public:
     void depositToClientBalance();
     void updateClientInFile(const Client& updatedClient) const;
     void readClientsFromFile(); // Обновленное объявление
+    void findClient(const std::string& clientName) const;
 };
 
 #endif // SYSTEM_H
