@@ -2,7 +2,7 @@
 
 #include "system.h"
 #include <iostream>
-
+#include <limits>
 
 int main() {
     // Создаем объект системы
@@ -33,6 +33,13 @@ int main() {
 
             int choice;
             std::cin >> choice;
+
+            if(std::cin.fail()){
+                        std::cin.clear();
+                        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                        std::cout << "Invailid input.";
+                        continue;}
+
 
             switch (choice) {
                 case 1: {
