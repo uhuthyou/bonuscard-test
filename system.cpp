@@ -22,7 +22,7 @@ bool System::login(const std::string& username, const std::string& password) {
 }
 void writeClientToFile(const Client& newClient) {
     // Открываем файл для записи в конец
-    std::ofstream file("D:\\Github rep\\bonuscard-test\\clients.txt", std::ios::app);
+    std::ofstream file("C:\\NewProgect\\clients.txt", std::ios::app);
 
     if (file.is_open()) {
         // Записываем информацию о новом клиенте
@@ -71,7 +71,7 @@ void System::displayAllClients() const {
 }
 
 void System::readClientsFromFile() {
-        std::ifstream file("D:\\Github rep\\bonuscard-test\\clients.txt");
+        std::ifstream file("C:\\NewProgect\\clients.txt");
 
         if (!file.is_open()) {
             std::cerr << "Unable to open file: " << std::endl;
@@ -107,7 +107,7 @@ void System::readClientsFromFile() {
     }
 
 void System::findClient(const std::string& clientName) const {
-    std::ifstream file("D:\\Github rep\\bonuscard-test\\clients.txt");
+    std::ifstream file("C:\\NewProgect\\clients.txt");
 
     if (file.is_open()) {
         std::string line;
@@ -145,7 +145,7 @@ void System::findClient(const std::string& clientName) const {
 }
 
 int System::findCardNumberByName(const std::string& clientName) const {
-    std::ifstream file("D:\\Github rep\\bonuscard-test\\clients.txt");
+    std::ifstream file("C:\\NewProgect\\clients.txt");
 
     if (file.is_open()) {
         std::string line;
@@ -176,7 +176,7 @@ void System::recordOperation(const std::string& clientName, char operationType, 
     int cardNumber = findCardNumberByName(clientName);
 
     if (cardNumber != -1) {
-        std::ofstream file("D:\\Github rep\\bonuscard-test\\operations.txt", std::ios::app);
+        std::ofstream file("C:\\NewProgect\\operations.txt", std::ios::app);
 
         if (file.is_open()) {
             file << "Client Name: " << clientName << "\n";
@@ -215,7 +215,7 @@ void System::performOperation(const std::string& clientName, char operationType,
 }
 
 void System::displayClientOperationHistory(const std::string& clientName) const {
-    std::ifstream file("D:\\Github rep\\bonuscard-test\\operations.txt");
+    std::ifstream file("C:\\NewProgect\\operations.txt");
 
     if (file.is_open()) {
             std::string line;
@@ -314,8 +314,8 @@ void System::withdrawFromClientBalance(const std::string& clientName, double amo
 }
 
 void System::updateClientInFile(const Client& updatedClient) const {
-    std::ifstream inFile("D:\\Github rep\\bonuscard-test\\clients.txt");
-        std::ofstream outFile("D:\\Github rep\\bonuscard-test\\temp.txt");
+    std::ifstream inFile("C:\\NewProgect\\clients.txt");
+        std::ofstream outFile("C:\\NewProgect\\temp.txt");
         int count = 1;
 
         if (inFile.is_open() && outFile.is_open()) {
@@ -339,8 +339,8 @@ void System::updateClientInFile(const Client& updatedClient) const {
             inFile.close();
             outFile.close();
 
-            remove("D:\\Github rep\\bonuscard-test\\clients.txt");
-            rename("D:\\Github rep\\bonuscard-test\\temp.txt", "D:\\Github rep\\bonuscard-test\\clients.txt");
+            remove("C:\\NewProgect\\clients.txt");
+            rename("C:\\NewProgect\\temp.txt", "C:\\NewProgect\\clients.txt");
 
             std::cout << "Client information updated in file.\n";
         } else {
@@ -349,7 +349,7 @@ void System::updateClientInFile(const Client& updatedClient) const {
 }
 
 void System::displayClientsFromFile() const {
-    std::ifstream file("D:\\Github rep\\bonuscard-test\\clients.txt");
+    std::ifstream file("C:\\NewProgect\\clients.txt");
 
     if (file.is_open()) {
             std::string line;
@@ -442,7 +442,7 @@ void System::displayClientTransactionHistory(const std::string& clientName) cons
 }*/
 
 void System::displayAnnualReport() const {
-    std::ifstream file("D:\\Github rep\\bonuscard-test\\operations.txt");
+    std::ifstream file("C:\\NewProgect\\operations.txt");
 
     if (file.is_open()) {
         std::string line;
