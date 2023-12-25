@@ -280,13 +280,20 @@ void System::performOperation(const std::string& clientName, char operationType,
             it->getBonusCard().addToBalance(amount);
             totalDeposited += amount;
         } else if (operationType == '-') {
-            it->getBonusCard().withdrawFromBalance(amount);
-            totalWithdrawn += amount;
-        }
+            // Проверяем, достаточно ли средств для списания
+            if (it->getBonusCard().getBalance() >= amount) {
+                it->getBonusCard().withdrawFromBalance(amount);
+                totalWithdrawn += amount;
 
-        updateClientInFile(*it);
-        std::cout << "Operation successful! Updated balance for client " << clientName << ": " << it->getBonusCard().getBalance() << "\n";
-        recordOperation(clientName, operationType, amount);
+                // Обновляем информацию в файле
+                updateClientInFile(*it);
+                recordOperation(clientName, operationType, amount);
+
+                std::cout << "Operation successful! Updated balance for client " << clientName << ": " << it->getBonusCard().getBalance() << "\n";
+            } else {
+                std::cout << "Insufficient funds. Withdrawal failed.\n";
+            }
+        }
     } else {
         std::cout << "Client not found. Operation failed.\n";
     }
