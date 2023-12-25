@@ -61,6 +61,29 @@ const std::vector<Transaction>& BonusCard::getTransactions() const {
     return transactions;
 }
 
+double BonusCard::getTransactionsTotal(Transaction::OperationType operationType) const {
+    double total = 0.0;
+
+    for (const Transaction& transaction : transactions) {
+        if (transaction.operationType == operationType) {
+            total += transaction.amount;
+        }
+    }
+
+    return total;
+}
+
+void BonusCard::setCardNumber(int number) {
+    cardNumber = number;
+}
+BonusCard& Client::getBonusCard() {
+    return card;
+}
+
+const BonusCard& Client::getBonusCard() const {
+    return card;
+}
+
 System::System(const std::string& username, const std::string& password)
     : adminUsername(username), adminPassword(password), totalDeposited(0.0), totalWithdrawn(0.0) {System::readClientsFromFile();}
 
@@ -257,24 +280,18 @@ void System::performOperation(const std::string& clientName, char operationType,
             it->getBonusCard().addToBalance(amount);
             totalDeposited += amount;
         } else if (operationType == '-') {
-            // Проверяем, достаточно ли средств для списания
-            if (it->getBonusCard().getBalance() >= amount) {
-                it->getBonusCard().withdrawFromBalance(amount);
-                totalWithdrawn += amount;
-
-                // Обновляем информацию в файле
-                updateClientInFile(*it);
-                recordOperation(clientName, operationType, amount);
-
-                std::cout << "Operation successful! Updated balance for client " << clientName << ": " << it->getBonusCard().getBalance() << "\n";
-            } else {
-                std::cout << "Insufficient funds. Withdrawal failed.\n";
-            }
+            it->getBonusCard().withdrawFromBalance(amount);
+            totalWithdrawn += amount;
         }
+
+        updateClientInFile(*it);
+        std::cout << "Operation successful! Updated balance for client " << clientName << ": " << it->getBonusCard().getBalance() << "\n";
+        recordOperation(clientName, operationType, amount);
     } else {
         std::cout << "Client not found. Operation failed.\n";
     }
 }
+
 
 void System::displayClientOperationHistory(const std::string& clientName) const {
     std::ifstream file("C:\\NewProgect\\operations.txt");

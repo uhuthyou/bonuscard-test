@@ -1,13 +1,13 @@
 // client.cpp
 
 #include "client.h"
+#include "system.h"
 #include <algorithm> // Добавим для std::shuffle
 #include <iomanip>   // Добавим для форматирования вывода
 #include <ctime>
 #include <cstdlib>
 
 // Статический метод для генерации уникального номера карты
-
 
 Client::Client(const std::string& clientName) : name(clientName) {}
 
@@ -32,9 +32,9 @@ void Client::displayInfo() const {
                   << std::setw(20) << "Balance After\n";
         std::cout << "-----------------------------------------------\n";
         for (const auto& transaction : transactions) {
-            std::tm* tm_info = std::localtime(&transaction.dateTime);
+//            std::tm* tm_info = std::localtime(&transaction.dateTime);
             char buffer[20];
-            std::strftime(buffer, sizeof(buffer), "%Y-%m-%d %H:%M:%S", tm_info);
+           // std::strftime(buffer, sizeof(buffer), "%Y-%m-%d %H:%M:%S", tm_info);
 
             std::string operationTypeStr = (transaction.operationType == Transaction::OperationType::Deposit)
                                                ? "Deposit"
@@ -46,14 +46,6 @@ void Client::displayInfo() const {
     }
 }
 
-BonusCard& Client::getBonusCard() {
-    return card;
-}
-
-const BonusCard& Client::getBonusCard() const {
-    return card;
-}
-
 void Client::withdrawFromBalance(double amount) {
     // Списываем бонусы с баланса карты
     card.withdrawFromBalance(amount);
@@ -61,20 +53,4 @@ void Client::withdrawFromBalance(double amount) {
 
 std::string Client::getName() const {
     return name;
-}
-
-double BonusCard::getTransactionsTotal(Transaction::OperationType operationType) const {
-    double total = 0.0;
-
-    for (const Transaction& transaction : transactions) {
-        if (transaction.operationType == operationType) {
-            total += transaction.amount;
-        }
-    }
-
-    return total;
-}
-
-void BonusCard::setCardNumber(int number) {
-    cardNumber = number;
 }
