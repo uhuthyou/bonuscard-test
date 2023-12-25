@@ -2,68 +2,12 @@
 
 #include "client.h"
 #include <algorithm> // Добавим для std::shuffle
-//#include <random>    // Добавим для std::default_random_engine
 #include <iomanip>   // Добавим для форматирования вывода
 #include <ctime>
 #include <cstdlib>
 
-// Инициализация статической переменной для уникального номера карты
-//int BonusCard::nextCardNumber = 123456789;
-
 // Статический метод для генерации уникального номера карты
-int BonusCard::generateUniqueCardNumber() {
-    std::mt19937 generator(static_cast<unsigned int>(std::time(nullptr)));
-            std::uniform_int_distribution<int> distribution(1000000000, 9999999999);
 
-            int uniqueNumber = distribution(generator);
-
-            return uniqueNumber;
-        }
-
-BonusCard::BonusCard() : cardNumber(generateUniqueCardNumber()), balance(0.0) {}
-
-int BonusCard::getCardNumber() const {
-    return cardNumber;
-}
-
-double BonusCard::getBalance() const {
-    return balance;
-}
-
-void BonusCard::addToBalance(double amount) {
-    balance += amount;
-
-    // Записываем операцию в историю
-    Transaction transaction;
-    transaction.dateTime = std::time(nullptr);
-    transaction.operationType = Transaction::OperationType::Deposit;
-    transaction.amount = amount;
-    transaction.balanceAfterTransaction = balance;
-
-    transactions.push_back(transaction);
-}
-
-void BonusCard::withdrawFromBalance(double amount) {
-    // Проверка наличия достаточного баланса перед списанием
-    if (balance >= amount) {
-        balance -= amount;
-
-        // Записываем операцию в историю
-        Transaction transaction;
-        transaction.dateTime = std::time(nullptr);
-        transaction.operationType = Transaction::OperationType::Withdrawal;
-        transaction.amount = amount;
-        transaction.balanceAfterTransaction = balance;
-
-        transactions.push_back(transaction);
-    } else {
-        std::cout << "Insufficient funds. Withdrawal failed.\n";
-    }
-}
-
-const std::vector<Transaction>& BonusCard::getTransactions() const {
-    return transactions;
-}
 
 Client::Client(const std::string& clientName) : name(clientName) {}
 

@@ -48,3 +48,13 @@ Card Number: 1089368660
 Operation Type: Deposit
 Amount: 9
 
+Client Name: 5
+Card Number: 1014603316
+Operation Type: Deposit
+Amount: 5
+
+Client Name: 5
+Card Number: 1014603316
+Operation Type: Withdrawal
+Amount: 1000
+

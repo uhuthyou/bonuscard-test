@@ -6,6 +6,61 @@
 #include <fstream> // Для записи в файл
 #include <map>
 
+int BonusCard::generateUniqueCardNumber() {
+    std::mt19937 generator(static_cast<unsigned int>(std::time(nullptr)));
+            std::uniform_int_distribution<int> distribution(1000000000, 9999999999);
+
+            int uniqueNumber = distribution(generator);
+
+            return uniqueNumber;
+        }
+
+BonusCard::BonusCard() : cardNumber(generateUniqueCardNumber()), balance(0.0) {}
+
+int BonusCard::getCardNumber() const {
+    return cardNumber;
+}
+
+double BonusCard::getBalance() const {
+    return balance;
+}
+
+void BonusCard::addToBalance(double amount) {
+    balance += amount;
+
+    // Записываем операцию в историю
+    Transaction transaction;
+    transaction.dateTime = std::time(nullptr);
+    transaction.operationType = Transaction::OperationType::Deposit;
+    transaction.amount = amount;
+    transaction.balanceAfterTransaction = balance;
+
+    transactions.push_back(transaction);
+}
+
+void BonusCard::withdrawFromBalance(double amount) {
+    // Проверка наличия достаточного баланса перед списанием
+    if (balance >= amount) {
+        balance -= amount;
+
+        // Записываем операцию в историю
+        Transaction transaction;
+        transaction.dateTime = std::time(nullptr);
+        transaction.operationType = Transaction::OperationType::Withdrawal;
+        transaction.amount = amount;
+        transaction.balanceAfterTransaction = balance;
+
+        transactions.push_back(transaction);
+    } else {
+        std::cout << "Insufficient funds. Withdrawal failed.\n";
+    }
+}
+
+
+const std::vector<Transaction>& BonusCard::getTransactions() const {
+    return transactions;
+}
+
 System::System(const std::string& username, const std::string& password)
     : adminUsername(username), adminPassword(password), totalDeposited(0.0), totalWithdrawn(0.0) {System::readClientsFromFile();}
 
@@ -202,13 +257,20 @@ void System::performOperation(const std::string& clientName, char operationType,
             it->getBonusCard().addToBalance(amount);
             totalDeposited += amount;
         } else if (operationType == '-') {
-            it->getBonusCard().withdrawFromBalance(amount);
-            totalWithdrawn += amount;
-        }
+            // Проверяем, достаточно ли средств для списания
+            if (it->getBonusCard().getBalance() >= amount) {
+                it->getBonusCard().withdrawFromBalance(amount);
+                totalWithdrawn += amount;
 
-        updateClientInFile(*it);
-        std::cout << "Operation successful! Updated balance for client " << clientName << ": " << it->getBonusCard().getBalance() << "\n";
-        recordOperation(clientName, operationType, amount);
+                // Обновляем информацию в файле
+                updateClientInFile(*it);
+                recordOperation(clientName, operationType, amount);
+
+                std::cout << "Operation successful! Updated balance for client " << clientName << ": " << it->getBonusCard().getBalance() << "\n";
+            } else {
+                std::cout << "Insufficient funds. Withdrawal failed.\n";
+            }
+        }
     } else {
         std::cout << "Client not found. Operation failed.\n";
     }
@@ -386,60 +448,6 @@ void System::displayClientTransactionHistory(const std::string& clientName) cons
         std::cout << "Client not found. Unable to display transaction history.\n";
     }
 }
-
-/*void System::displayAnnualReport() const { //НЕТУ НОМЕРА КАРТЫ
-    std::ifstream file("D:\\Github rep\\bonuscard-test\\operations.txt");
-
-    if (file.is_open()) {
-        std::string line;
-        std::string clientName;
-        std::string operationType;
-        std::string amount;
-        std::map<std::string, std::tuple<int, double, double>> clientOperations;  // Карта для хранения операций каждого клиента
-
-        while (std::getline(file, line)) {
-            if (line.find("Client Name: ") != std::string::npos) {
-                clientName = line.substr(line.find(": ") + 2);  // Извлекаем имя клиента
-            } else if (line.find("Card Number: ") != std::string::npos) {
-                int cardNumber = std::stoi(line.substr(line.find(": ") + 2));  // Извлекаем номер карты клиента
-                clientOperations[clientName] = std::make_tuple(cardNumber, 0.0, 0.0);
-            } else if (line.find("Operation Type: ") != std::string::npos) {
-                operationType = line.substr(line.find(": ") + 2);  // Извлекаем тип операции
-            } else if (line.find("Amount: ") != std::string::npos) {
-                amount = line.substr(line.find(": ") + 2);  // Извлекаем количество баллов
-                if (operationType == "Deposit") {
-                    std::get<1>(clientOperations[clientName]) += std::stod(amount);
-                } else if (operationType == "Withdrawal") {
-                    std::get<2>(clientOperations[clientName]) += std::stod(amount);
-                }
-            }
-        }
-
-        std::cout << std::setw(20) << "Client Name" << " | " << std::setw(20) << "Card number" << " | "
-                  << std::setw(10) << "Deposit" << " | " << std::setw(10) << "Widthdraw" << " | "
-                  << std::setw(20) << "Balance" << '\n';
-        std::cout << std::string(90, '-') << '\n';  // Выводим разделитель
-
-        double totalDeposited = 0;
-        double totalWithdrawn = 0;
-
-        for (const auto& client : clientOperations) {
-            totalDeposited += std::get<1>(client.second);
-            totalWithdrawn += std::get<2>(client.second);
-            std::cout << std::setw(20) << client.first << " | " << std::setw(20) << std::get<0>(client.second)
-                      << " | " << std::setw(10) << std::get<1>(client.second) << " | "
-                      << std::setw(10) << std::get<2>(client.second) << " | "
-                      << std::setw(20) << (std::get<1>(client.second) - std::get<2>(client.second)) << '\n';  // Выводим строку таблицы
-        }
-
-        std::cout << "All deposit: " << totalDeposited << '\n';
-        std::cout << "All widthdraw: " << totalWithdrawn << '\n';
-
-        file.close();
-    } else {
-        std::cout << "Unable to open file for reading.\n";
-    }
-}*/
 
 void System::displayAnnualReport() const {
     std::ifstream file("C:\\NewProgect\\operations.txt");
