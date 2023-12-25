@@ -6,7 +6,7 @@
 #include <fstream> // Для записи в файл
 #include <map>
 
-int BonusCard::generateUniqueCardNumber() {
+int BonusCard::generateUniqueCardNumber() {//генерация уникального номера карты
     std::mt19937 generator(static_cast<unsigned int>(std::time(nullptr)));
             std::uniform_int_distribution<int> distribution(1000000000, 9999999999);
 
@@ -17,15 +17,15 @@ int BonusCard::generateUniqueCardNumber() {
 
 BonusCard::BonusCard() : cardNumber(generateUniqueCardNumber()), balance(0.0) {}
 
-int BonusCard::getCardNumber() const {
+int BonusCard::getCardNumber() const {//получение номера карты
     return cardNumber;
 }
 
-double BonusCard::getBalance() const {
+double BonusCard::getBalance() const {//получение баланса
     return balance;
 }
 
-void BonusCard::addToBalance(double amount) {
+void BonusCard::addToBalance(double amount) {//начисление
     balance += amount;
 
     // Записываем операцию в историю
@@ -38,7 +38,7 @@ void BonusCard::addToBalance(double amount) {
     transactions.push_back(transaction);
 }
 
-void BonusCard::withdrawFromBalance(double amount) {
+void BonusCard::withdrawFromBalance(double amount) {//списание
     // Проверка наличия достаточного баланса перед списанием
     if (balance >= amount) {
         balance -= amount;
@@ -73,14 +73,14 @@ double BonusCard::getTransactionsTotal(Transaction::OperationType operationType)
     return total;
 }
 
-void BonusCard::setCardNumber(int number) {
+void BonusCard::setCardNumber(int number) {//добавление номера карты
     cardNumber = number;
 }
-BonusCard& Client::getBonusCard() {
+BonusCard& Client::getBonusCard() {//получение номера карты
     return card;
 }
 
-const BonusCard& Client::getBonusCard() const {
+const BonusCard& Client::getBonusCard() const {//получение номера карты
     return card;
 }
 
@@ -98,7 +98,7 @@ bool System::login(const std::string& username, const std::string& password) {
         return false;
     }
 }
-void writeClientToFile(const Client& newClient) {
+void writeClientToFile(const Client& newClient) {//запись клиента в файл
     // Открываем файл для записи в конец
     std::ofstream file("C:\\NewProgect\\clients.txt", std::ios::app);
 
@@ -115,7 +115,7 @@ void writeClientToFile(const Client& newClient) {
     }
 }
 
-void System::registerClient() {
+void System::registerClient() {//регистрация пользователей
     std::string clientName;
     std::cout << "Enter client name: ";
     std::cin >> clientName;
@@ -131,24 +131,7 @@ void System::registerClient() {
     writeClientToFile(newClient);
 }
 
-void System::displayAllClients() const {
-    if (clients.empty()) {
-        std::cout << "No clients registered yet.\n";
-        return;
-    }
-
-    // Выводим заголовок таблицы
-    std::cout << std::setw(20) << "Client Name" << std::setw(15) << "Card Number" << std::setw(10) << "Balance\n";
-    std::cout << "-----------------------------------------------\n";
-
-    // Выводим информацию о каждом клиенте
-    for (const Client& client : clients) {
-        std::cout << std::setw(20) << client.getName() << std::setw(15) << client.getBonusCard().getCardNumber()
-                  << std::setw(10) << client.getBonusCard().getBalance() << "\n";
-    }
-}
-
-void System::readClientsFromFile() {
+void System::readClientsFromFile() {// чтение клиента из файла
         std::ifstream file("C:\\NewProgect\\clients.txt");
 
         if (!file.is_open()) {
@@ -184,7 +167,7 @@ void System::readClientsFromFile() {
         file.close();
     }
 
-void System::findClient(const std::string& clientName) const {
+void System::findClient(const std::string& clientName) const {//поиск клиентов
     std::ifstream file("C:\\NewProgect\\clients.txt");
 
     if (file.is_open()) {
@@ -222,7 +205,7 @@ void System::findClient(const std::string& clientName) const {
     }
 }
 
-int System::findCardNumberByName(const std::string& clientName) const {
+int System::findCardNumberByName(const std::string& clientName) const {//поиск номера карты по имени
     std::ifstream file("C:\\NewProgect\\clients.txt");
 
     if (file.is_open()) {
@@ -250,7 +233,7 @@ int System::findCardNumberByName(const std::string& clientName) const {
     }
 }
 
-void System::recordOperation(const std::string& clientName, char operationType, double amount) {
+void System::recordOperation(const std::string& clientName, char operationType, double amount) {//запись операций в файл
     int cardNumber = findCardNumberByName(clientName);
 
     if (cardNumber != -1) {
@@ -271,7 +254,7 @@ void System::recordOperation(const std::string& clientName, char operationType, 
     }
 }
 
-void System::performOperation(const std::string& clientName, char operationType, double amount) {
+void System::performOperation(const std::string& clientName, char operationType, double amount) {//выполнить операцию
     auto it = std::find_if(clients.begin(), clients.end(),
                            [&clientName](const Client& client) { return client.getName() == clientName; });
 
@@ -300,7 +283,7 @@ void System::performOperation(const std::string& clientName, char operationType,
 }
 
 
-void System::displayClientOperationHistory(const std::string& clientName) const {
+void System::displayClientOperationHistory(const std::string& clientName) const {//вывести историю операций клиента
     std::ifstream file("C:\\NewProgect\\operations.txt");
 
     if (file.is_open()) {
@@ -338,7 +321,7 @@ void System::displayClientOperationHistory(const std::string& clientName) const 
         }
     }
 
-void System::displayClientSummary(const std::string& clientName) const {
+void System::displayClientSummary(const std::string& clientName) const {//вывести таблицу по клиенту
     auto it = std::find_if(clients.begin(), clients.end(),
                            [&clientName](const Client& client) { return client.getName() == clientName; });
 
@@ -360,46 +343,7 @@ void System::displayClientSummary(const std::string& clientName) const {
     }
 }
 
-
-void System::depositToClientBalance(const std::string& clientName, double amount) {
-    auto it = std::find_if(clients.begin(), clients.end(),
-                           [&clientName](const Client& client) { return client.getName() == clientName; });
-
-    if (it != clients.end()) {
-        // Пополняем баланс клиента
-        it->getBonusCard().addToBalance(amount);
-
-        // Обновляем суммарную информацию
-        totalDeposited += amount;
-        std::cout << "Deposit successful! Updated balance for client " << clientName << ": " << it->getBonusCard().getBalance() << "\n";
-
-        // Обновляем информацию в файле
-        updateClientInFile(*it);
-    } else {
-        std::cout << "Client not found. Deposit failed.\n";
-    }
-}
-
-void System::withdrawFromClientBalance(const std::string& clientName, double amount) {
-    auto it = std::find_if(clients.begin(), clients.end(),
-                           [&clientName](const Client& client) { return client.getName() == clientName; });
-
-    if (it != clients.end()) {
-        // Пополняем баланс клиента
-        it->getBonusCard().withdrawFromBalance(amount);
-
-        // Обновляем суммарную информацию
-        totalDeposited -= amount;
-        std::cout << "withdraw successful! Updated balance for client " << clientName << ": " << it->getBonusCard().getBalance() << "\n";
-
-        // Обновляем информацию в файле
-        updateClientInFile(*it);
-    } else {
-        std::cout << "Client not found. Deposit failed.\n";
-    }
-}
-
-void System::updateClientInFile(const Client& updatedClient) const {
+void System::updateClientInFile(const Client& updatedClient) const {//обновить данные клиента в файле операций
     std::ifstream inFile("C:\\NewProgect\\clients.txt");
         std::ofstream outFile("C:\\NewProgect\\temp.txt");
         int count = 1;
@@ -434,7 +378,7 @@ void System::updateClientInFile(const Client& updatedClient) const {
         }
 }
 
-void System::displayClientsFromFile() const {
+void System::displayClientsFromFile() const {//вфвести информацию о конкретном клиенте из файла
     std::ifstream file("C:\\NewProgect\\clients.txt");
 
     if (file.is_open()) {
@@ -462,18 +406,8 @@ void System::displayClientsFromFile() const {
             std::cout << "Unable to open file for reading.\n";
         }
     }
-void System::displayClientTransactionHistory(const std::string& clientName) const {
-    auto it = std::find_if(clients.begin(), clients.end(),
-                           [&clientName](const Client& client) { return client.getName() == clientName; });
 
-    if (it != clients.end()) {
-        it->displayInfo();
-    } else {
-        std::cout << "Client not found. Unable to display transaction history.\n";
-    }
-}
-
-void System::displayAnnualReport() const {
+void System::displayAnnualReport() const {//вывести годовой отчёт
     std::ifstream file("C:\\NewProgect\\operations.txt");
 
     if (file.is_open()) {

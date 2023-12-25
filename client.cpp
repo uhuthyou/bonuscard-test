@@ -51,6 +51,6 @@ void Client::withdrawFromBalance(double amount) {
     card.withdrawFromBalance(amount);
 }
 
-std::string Client::getName() const {
+std::string Client::getName() const {//получение имени
     return name;
 }
