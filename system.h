@@ -19,6 +19,7 @@ private:
 public:
     System(const std::string& username, const std::string& password);
 
+    void userInterface();
     void displayAllClients() const;  // Новый метод
     bool login(const std::string& username, const std::string& password);
     void registerClient();
@@ -40,6 +41,8 @@ public:
     void displayClientOperationHistory(const std::string& clientName) const;
 
     int findCardNumberByName(const std::string& clientName) const;
+
+
 };
 
 #endif // SYSTEM_H

@@ -38,6 +38,8 @@ int main() {
                 case 1: {
                     // Регистрация нового клиента
                     mySystem.registerClient();
+                    system("pause");
+                    system("cls");
                     break;
                 }
             case 2: {
@@ -56,6 +58,8 @@ int main() {
                 std::cin >> operationAmount;
 
                 mySystem.performOperation(clientForOperation, operationType, operationAmount);
+                system("pause");
+                system("cls");
                 break;
             }
 
@@ -66,16 +70,22 @@ int main() {
                     std::cin >> clientForHistory;
 
                     mySystem.displayClientOperationHistory(clientForHistory);
+                    system("pause");
+                    system("cls");
                     break;
             }
                 case 4: {
                     // Вывод годового отчета
                     mySystem.displayAnnualReport();
+                    system("pause");
+                    system("cls");
                     break;
                 }
                 case 5: {
                     // Вывод информации о всех клиентах
                     mySystem.displayClientsFromFile();
+                    system("pause");
+                    system("cls");
                     break;
                 }
             case 6: {
@@ -85,11 +95,15 @@ int main() {
                 std::cin >> clientToFind;
 
                 mySystem.findClient(clientToFind);
+                system("pause");
+                system("cls");
                 break;
             }
                 case 7: {
                     // Выход из программы
                     exitMenu = true;
+                    system("pause");
+                    system("cls");
                     break;
                 }
                 default:

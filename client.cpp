@@ -8,7 +8,7 @@
 #include <cstdlib>
 
 // Инициализация статической переменной для уникального номера карты
-int BonusCard::nextCardNumber = 123456789;
+//int BonusCard::nextCardNumber = 123456789;
 
 // Статический метод для генерации уникального номера карты
 int BonusCard::generateUniqueCardNumber() {
