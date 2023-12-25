@@ -103,7 +103,6 @@ int main() {
                     // Выход из программы
                     exitMenu = true;
                     system("pause");
-                    system("cls");
                     break;
                 }
                 default:
