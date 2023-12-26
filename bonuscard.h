@@ -9,7 +9,6 @@
 
 class BonusCard {
 private:
-    //static int nextCardNumber;
     std::vector<Transaction> transactions;
 
     static int generateUniqueCardNumber();
